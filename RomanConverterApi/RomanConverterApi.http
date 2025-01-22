@@ -1,0 +1,6 @@
+@RomanConverterApi_HostAddress = http://localhost:5070
+
+GET {{RomanConverterApi_HostAddress}}/convert/roman-to-int
+Accept: application/json
+
+###
