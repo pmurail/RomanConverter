@@ -5,7 +5,7 @@ WORKDIR /src
 # Copy solution and project files
 COPY ["RomanConverter.sln", "./"]
 COPY ["RomanConverter/RomanConverter.csproj", "RomanConverter/"]
-COPY ["RomanConverter/RomanConverterApi/RomanConverterApi.csproj", "RomanConverter/RomanConverterApi/"]
+COPY ["RomanConverter/RomanConverterApi.csproj", "RomanConverterApi/"]
 COPY ["RomanConverterTest/RomanConverterTest.csproj", "RomanConverterTest/"]
 
 # Restore dependencies
