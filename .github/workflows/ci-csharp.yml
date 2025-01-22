@@ -1,4 +1,4 @@
-name: .NET Core CI
+name: .NET Core CI with Docker
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,24 +36,18 @@ jobs:
           name: TestResults
           path: ./RomanConverterTest/TestResults.trx
 
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          dotnet-version: '9.x'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build the project
-        run: dotnet build ./RomanConverter.sln --configuration Release
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Create the package
-        run: dotnet pack ./RomanConverter/RomanConverter.csproj --configuration Release
-
-      - name: Publish the package
-        run: dotnet nuget push ./RomanConverter/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/romanconverter:latest,${{ secrets.DOCKERHUB_USERNAME }}/romanconverter:${{ github.sha }}
