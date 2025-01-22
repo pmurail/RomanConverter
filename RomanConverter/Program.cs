@@ -4,6 +4,23 @@ namespace RomanConverter
 {
     public class Program
     {
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("Entrez un chiffre romain : ");
+            string roman = Console.ReadLine();
+
+            try
+            {
+                RomanValueIsWrong(roman.ToUpper());
+                int result = RomanToInt(roman);
+                Console.WriteLine($"La valeur entière de {roman} est : {result}");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Erreur : {ex.Message}");
+            }
+        }
+
         public static int RomanToInt(string romanValue)
         {
             Dictionary<char, int> romanValues = new Dictionary<char, int>
